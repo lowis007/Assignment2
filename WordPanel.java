@@ -6,16 +6,21 @@ import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.concurrent.CountDownLatch;
+import java.io.*;
+import javax.swing.*;
+import java.awt.event.*;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JOptionPane;
 
-public class WordPanel extends JPanel implements Runnable {
+public class WordPanel extends JPanel implements ActionListener,Runnable {
 		public static volatile boolean done;
 		private WordRecord[] words;
 		private int noWords;
 		private int maxY;
+      private Timer t;
+      private Word[] word;
       
 
 		
@@ -41,28 +46,56 @@ public class WordPanel extends JPanel implements Runnable {
 			this.words=words; //will this work?
 			noWords = words.length;
 			done=false;
-			this.maxY=maxY;		
+			this.maxY=maxY;
+         t=new Timer(17,this);
+         t.setInitialDelay(0);
 		}
-		
+		public void actionPerformed(ActionEvent ex)
+      {
+         repaint();
+      }
 		public void run() {
 			//add in code to animate this
-         while(true)
+         //Runnable Word=new Word();
+         t.start();
+         //word=new Word[noWords];
+         for (int i=0;i<noWords;i++) 
          {
+				Thread word=new Thread(new Word(words[i]));
+            word.start();
+            
+            
+			}
+         /*for (int i=0;i<noWords;i++)
+         {
+            word[i].start();
+         }*/
+
+        /* while(true)
+         {
+            repaint();
+         }*/
+         
+         /*while(true)
+         {
+            //repaint();
             for (int i=0;i<noWords;i++)
             {
-               words[i].drop(words[i].getSpeed());
+               words[i].drop(1);
                try
                {
-                   Thread.sleep(100);
+                   Thread.sleep(10);
                }
                catch(InterruptedException ex)
                {
                    Thread.currentThread().interrupt();
                }
-               repaint();   
+               //if m
+               repaint();
+  
             } 
             //repaint();  
-         }
+         }*///repaint();
          //while(words)
          //this.repaint();
          /*for (int i=0;i<noWords;i++)
