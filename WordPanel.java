@@ -1,5 +1,6 @@
-package skeletonCodeAssgnmt2;
-
+//package skeletonCodeAssgnmt2;
+/**WordPanel class that controls the animation and look of words
+ */
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Font;
@@ -22,7 +23,9 @@ public class WordPanel extends JPanel implements ActionListener,Runnable {
       private Timer t;
       private Word[] word;
       
-
+/**displays the words on the JPanel
+ * @param g Graphics object
+ */
 		
 		public void paintComponent(Graphics g) {
 		    int width = getWidth();
@@ -50,10 +53,31 @@ public class WordPanel extends JPanel implements ActionListener,Runnable {
          t=new Timer(17,this);
          t.setInitialDelay(0);
 		}
+      /** stops all the threads
+      */
+      public void resetGame()
+      {
+         for (int i=0;i<noWords;i++) 
+         {
+            word[i].end();
+         }
+      }
+/**Action listener that updates the panels display with the timer
+ * @param ex ActionEvent object
+ */
 		public void actionPerformed(ActionEvent ex)
       {
+         
          repaint();
+         if(WordApp.complete) //displays message if game completes and ends threads
+         {
+            resetGame();
+            JOptionPane.showMessageDialog(null, "Game is Complete", "InfoBox: " + "GameOver", JOptionPane.INFORMATION_MESSAGE);
+         }
       }
+      /**creates the threads and starts them
+      *
+      */
 		public void run() {
 			//add in code to animate this
          //Runnable Word=new Word();
@@ -66,80 +90,7 @@ public class WordPanel extends JPanel implements ActionListener,Runnable {
             
             
 			}
-         /*for (int i=0;i<noWords;i++)
-         {
-            word[i].start();
-         }*/
-
-        /* while(true)
-         {
-            repaint();
-         }*/
-         
-         /*while(true)
-         {
-            //repaint();
-            for (int i=0;i<noWords;i++)
-            {
-               words[i].drop(1);
-               try
-               {
-                   Thread.sleep(10);
-               }
-               catch(InterruptedException ex)
-               {
-                   Thread.currentThread().interrupt();
-               }
-               //if m
-               repaint();
-  
-            } 
-            //repaint();  
-         }*///repaint();
-         //while(words)
-         //this.repaint();
-         /*for (int i=0;i<noWords;i++)
-         {
-            //new Thread(words[i].getWord())
-            while(words[i].getY()!=480)
-            {
-               try
-               {
-                  Thread.sleep(100);
-                  //g.drawString(words[i].getWord() ,words[i].getX(),words[i].getY()) ;
-
-               }
-               catch(Exception e)
-               {
-                  
-               }
-               this.repaint();
-            }
-         }
-         for (int i=0;i<noWords;i++)
-         {
-            new Thread(words[i].getWord())
-            {
-               public void run()
-               {
-                  try
-                  {
-                     Thread.sleep(100);
-                     //g.drawString(words[i].getWord(),words[i].getX(),words[i].getY()+20);
-                     words[i].setY(words[i].getY()+20);
-                  }
-                  //repaint();
-                  catch(InterruptedException e)
-                  {
-                     //JOptionPane.showMessageDialog(this,e);
-                  }   
-               }
-               //Thread.start();
-            };
-            
-         }
-         //repaint();
-       */  
+       
 		}
 
 	}

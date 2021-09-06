@@ -1,5 +1,5 @@
-package skeletonCodeAssgnmt2;
-
+//package skeletonCodeAssgnmt2;
+/** WordApp Class to play the game */
 import javax.swing.*;
 
 import java.awt.*;
@@ -30,10 +30,26 @@ public class WordApp {
 	static 	Score score = new Score();
 
 	static WordPanel w;
-   static JLabel[] arrlabels;
-   static volatile boolean end;
+   /** Creates an array of Jlables 
+    *  so that the Word class can receive
+    *  the labels in order to update the text
+    */
+   static JLabel[] arrlabels; 
+   static volatile boolean limit=false;//show that all words fell
+   static volatile boolean complete=false;//show that game ended
+   static volatile boolean end=false; //show that end button was pressed
+
+   static boolean beginGame=true;
+   /** Allow communication between WordApp and Word
+    */
+   static Word wrd;
+   
 	
-	
+	/**Creates the GUI and controls button events
+    * @param frameX controls the x axis of GUI
+    * @param frameY controls the y axis of GUI
+    * @param yLimit sets the max height that words can fall 
+    */
 	
 	public static void setupGUI(int frameX,int frameY,int yLimit) {
 		// Frame init and dimensions
@@ -66,8 +82,13 @@ public class WordApp {
 	      public void actionPerformed(ActionEvent evt) {
 	         String text = textEntry.getText();
 	          //[snip]
+            if((!text.equals(""))&&(wrd.catchWord(text)==true)) //calls functions that increment the caught counter
+            {;}
 	         textEntry.setText("");
-	         textEntry.requestFocus();
+            if(complete==false)
+            {
+	            textEntry.requestFocus();
+            }
 	      }
 	   });
 	   
@@ -84,21 +105,27 @@ public class WordApp {
 		{
 		   public void actionPerformed(ActionEvent e)
 		   {
-		      //[snip]
-            //w.run();
-            /*Word[] wword = new Word[noWords];
-            for(int i = 0; i < noWords; ++i)
+            
+            if(beginGame==false)
             {
-               wword[i]=new Word(i);   
+               w.resetGame();
             }
-            for(int i = 0; i < noWords; ++i)
-            {
-               wword[i]=new Word(i);   
-            }*/
-            
-            
-		      textEntry.requestFocus();
-            w.run();  //return focus to the text entry field
+            beginGame=false;
+			   score.resetScore();
+				caught.setText("Caught: " + score.getCaught() + "    ");//resets the games variable states and labels
+				missed.setText("Missed: " + score.getMissed() + "    ");
+				scr.setText("Score: " + score.getScore()+ "    ");
+				complete=false;
+				end=false;
+				limit=false;
+		      textEntry.requestFocus();//return focus to the text entry field
+            int x_inc=(int)frameX/noWords;
+	  	//initialize shared array of current words
+
+      		for (int i=0;i<noWords;i++) {
+      			words[i]=new WordRecord(dict.getNewWord(),i*x_inc,yLimit);
+      		}
+            w.run(); 
 		   }
 		});
 		JButton endB = new JButton("End");;
@@ -111,8 +138,9 @@ public class WordApp {
 		      //[snip]
             //tt.interrupt();
             end=true;
+            beginGame=true;
             score.resetScore();
-            caught.setText("Caught: " + score.getCaught() + "    ");
+            caught.setText("Caught: " + score.getCaught() + "    ");//stops game and resets the score
 				missed.setText("Missed: " + score.getMissed() + "    ");
 				scr.setText("Score: " + score.getScore()+ "    ");
             
@@ -126,7 +154,7 @@ public class WordApp {
 		   public void actionPerformed(ActionEvent e)
 		   {
 		      //[snip]
-            System.exit(0);
+            System.exit(0);//closes the game
 		   }
 		});
 		
@@ -142,7 +170,10 @@ public class WordApp {
        	//frame.pack();  // don't do this - packs it into small space
       frame.setVisible(true);
 	}
-
+/** takes the list of words from the textfile
+ *  @param filename name of file
+ *  @return an array of words from the textfile
+ */
    public static String[] getDictFromFile(String filename) {
 		String [] dictStr = null;
 		try {
@@ -161,7 +192,9 @@ public class WordApp {
 	    }
 		return dictStr;
 	}
-
+/** runs the game
+ *  @param args[0]=total words;args[1]=number of falling words;args[2]=file of words
+ */
 	public static void main(String[] args) {
     	
 		//deal with command line arguments
