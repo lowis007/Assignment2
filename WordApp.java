@@ -26,10 +26,12 @@ public class WordApp {
 
 	static WordRecord[] words;
 	static volatile boolean done;  //must be volatile
+   
 	static 	Score score = new Score();
 
 	static WordPanel w;
-   static JLabel missed;
+   static JLabel[] arrlabels;
+   static volatile boolean end;
 	
 	
 	
@@ -50,7 +52,8 @@ public class WordApp {
       txt.setLayout(new BoxLayout(txt, BoxLayout.LINE_AXIS)); 
       JLabel caught =new JLabel("Caught: " + score.getCaught() + "    ");
       JLabel missed =new JLabel("Missed:" + score.getMissed()+ "    ");
-      JLabel scr =new JLabel("Score:" + score.getScore()+ "    ");    
+      JLabel scr =new JLabel("Score:" + score.getScore()+ "    ");  
+      arrlabels=new JLabel[]{caught,missed,scr};  
       txt.add(caught);
 	   txt.add(missed);
 	   txt.add(scr);
@@ -107,6 +110,12 @@ public class WordApp {
 		   {
 		      //[snip]
             //tt.interrupt();
+            end=true;
+            score.resetScore();
+            caught.setText("Caught: " + score.getCaught() + "    ");
+				missed.setText("Missed: " + score.getMissed() + "    ");
+				scr.setText("Score: " + score.getScore()+ "    ");
+            
 		   }
 		});
 		JButton quitB = new JButton("Quit");;

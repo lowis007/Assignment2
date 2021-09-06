@@ -89,6 +89,7 @@ public class WordRecord {
 	public synchronized boolean matchWord(String typedText) {
 		//System.out.println("Matching against: "+text);
 		if (typedText.equals(this.text)) {
+         //WordApp.score.caughtWord(typedText.length());
 			resetWord();
 			return true;
 		}
