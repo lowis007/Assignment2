@@ -29,6 +29,7 @@ public class WordApp {
 	static 	Score score = new Score();
 
 	static WordPanel w;
+   static JLabel missed;
 	
 	
 	
@@ -81,8 +82,7 @@ public class WordApp {
 		   public void actionPerformed(ActionEvent e)
 		   {
 		      //[snip]
-            Thread tt=new Thread(w);
-            tt.start();
+            //w.run();
             /*Word[] wword = new Word[noWords];
             for(int i = 0; i < noWords; ++i)
             {
@@ -94,7 +94,8 @@ public class WordApp {
             }*/
             
             
-		      textEntry.requestFocus();  //return focus to the text entry field
+		      textEntry.requestFocus();
+            w.run();  //return focus to the text entry field
 		   }
 		});
 		JButton endB = new JButton("End");;
@@ -105,7 +106,7 @@ public class WordApp {
 		   public void actionPerformed(ActionEvent e)
 		   {
 		      //[snip]
-            tt.interrupt();
+            //tt.interrupt();
 		   }
 		});
 		JButton quitB = new JButton("Quit");;
